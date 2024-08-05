@@ -11,9 +11,9 @@ app.use(express.json());
 app.post("/search", async (req, res) => {
     const searchTerm = req.body.search.toLowerCase();
 
-    if(!searchTerm) {
+    if (!searchTerm) {
         return res.send(
-            "<tr></tr>"
+            '<tr></tr>'
         );
     }
     const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
@@ -25,12 +25,12 @@ app.post("/search", async (req, res) => {
         return name.includes(searchTerm) || email.includes(searchTerm)
     })
 
-    const searchResultHTML = searchResults.map((user) => {
+    const searchResultHTML = searchResults.map((user) => 
         `<tr>
             <td>${user.name}</td>
             <td>${user.email}</td>
         </tr>`
-    }).join('');
+    ).join('');
 
     res.send(searchResultHTML);
 });
