@@ -8,44 +8,53 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-app.post("/email", (req, res) => {
-    const submittedEmail = req.body.email;
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+app.get("/user/:id/edit", (req, res) => {
+    res.send(`
+        <form hx-put="/user/1" hx-target="this" hx-swap="outerHTML">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name"
+                name="name" value="Jada Mathele">
+            </div>
+            <div class="mb-3">
+                <label for="bio" class="form-label">Bio</label>
+                <textarea type="text" class="form-control" id="bio"
+                name="bio">
+Daughter of Ahayah | Software Developer | Coding Trainer | Nail Technician
+                </textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Save Changes
+            </button>
+            <button type="submit" hx-get="/index.html"
+            class="btn btn-secondary">
+                Cancel
+            </button>
+        </form>
+    `);
+});
 
-    if(emailRegex.test(submittedEmail)) {
-        return res.send(`
-            <div class="mb-3" hx-target="this" hx-swap="outerHTML">
-                <label class="form-label">Email address</label>
-                <input 
-                    type="email" 
-                    class="form-control"
-                    name="email"
-                    hx-post="/email"
-                    value="${submittedEmail}"
-                >
-                <div class="alert alert-success" role="alert">
-                    Valid email, thank you!
-                </div>
-          </div>    
-        `);
-    }else {
-        return res.send(`
-            <div class="mb-3" hx-target="this" hx-swap="outerHTML">
-                <label class="form-label">Email address</label>
-                <input 
-                    type="email" 
-                    class="form-control"
-                    name="email"
-                    hx-post="/email"
-                    value="${submittedEmail}"
-                >
-                <div class="alert alert-danger" role="alert">
-                    Invalid email, please enter a valid email address!
-                </div>
-          </div>     
-        `);
-    }
-
+app.put("/user/:id", (req, res) => {
+    const name = req.body.name;
+    const bio = req.body.bio;
+    //updated profile
+    res.send(`
+    <div class="card" style="width: 18rem;"
+        hx-target="this"
+        hx-swap="outerHTML"
+        >
+        <div class="card-body">
+            <h5 class="card-title">${name}</h5>
+            <p class="card-text">
+                ${bio}
+            </p>
+            <button href="#" class="btn btn-primary"
+            hx-get="/user/1/edit">
+                Click To Edit
+            </button>
+        </div>
+    </div>
+    `);   
 });
 
 app.listen(3000, () => {
