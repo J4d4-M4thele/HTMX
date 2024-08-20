@@ -23,8 +23,10 @@ app.post("/search", async (req, res) => {
         const name = user.name.toLowerCase();
         const email = user.email.toLowerCase();
         return name.includes(searchTerm) || email.includes(searchTerm)
-    })
+    });
 
+    //map method gets all users that have the search term included in the name and email address
+    //display the results in rows (as strings - as we make use of the join method)
     const searchResultHTML = searchResults.map((user) => 
         `<tr>
             <td>${user.name}</td>
